@@ -1,24 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+import Nav from './components/Nav/Nav.js'
+import FoodList from './components/FoodList/FoodList.js'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="InfoContainer">
+        <Nav />
+        <FoodList />
+          {/* data.map(rest => <ListCard />) */}
+          {/* onClick => <InfoCard /> */}
+      </div>
+      <div className="MapContainer">
+        This is the Map
+        {/* <Map /> */}
+      </div>
     </div>
   );
 }
