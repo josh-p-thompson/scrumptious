@@ -1,4 +1,41 @@
 .ListCard {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: .25rem;
+    margin-bottom: .25rem;
+}
+
+.ListCard:first-child {
+    margin-top: .5rem;
+}
+
+.ListCard:last-child {
+    margin-bottom: .5rem;
+}
+
+.ListCard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ListCard-header-location {
+    display: flex;
+    align-items: center;
+}
+
+.ListCard-container {
+    padding-bottom: 0px;
+}
+
+.ListCard-name {
+    font-weight: 700;
+}
+
+.ListCard-address {
+    margin-top: .2rem;
+    font-size: .75rem;
+}
+
+.ListCard-eater {
+    width: 3rem;
+    height: 1rem;
 }
