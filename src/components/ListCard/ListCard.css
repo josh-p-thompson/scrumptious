@@ -4,7 +4,7 @@
 }
 
 .ListCard:first-child {
-    margin-top: .5rem;
+    margin-top: 0rem;
 }
 
 .ListCard:last-child {
@@ -17,25 +17,9 @@
     align-items: center;
 }
 
-.ListCard-header-location {
-    display: flex;
-    align-items: center;
-}
-
-.ListCard-container {
-    padding-bottom: 0px;
-}
-
-.ListCard-name {
-    font-weight: 700;
-}
-
-.ListCard-address {
-    margin-top: .2rem;
-    font-size: .75rem;
-}
-
 .ListCard-eater {
     width: 3rem;
     height: 1rem;
+    right: 1rem;
+    padding: 12px;
 }
