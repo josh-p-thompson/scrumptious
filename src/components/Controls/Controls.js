@@ -8,7 +8,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 function Controls(props) {
-    const {articles, selectedArticles, onSelectChange, toggleSelect, sortBy, onSortChange} = props;
+    const {articles, filteredArticles, onSelectChange, toggleSelect, sortBy, onSortChange} = props;
 
     const [isFiltered, setFilter] = useState(false);
 
@@ -50,7 +50,7 @@ function Controls(props) {
                 options={articles}
                 onChange={onSelectChange}
                 toggleSelect={toggleSelect}
-                value={selectedArticles}
+                value={filteredArticles}
             />
         ) :(<empty></empty>)
         }

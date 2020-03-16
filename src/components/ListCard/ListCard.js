@@ -26,9 +26,6 @@ const useStyles = makeStyles({
       paddingLeft: 4, 
       paddingRight: 4,
   }, 
-  actionItems: {
-    justifyContent: "flexEnd",
-  }, 
 });
 
 function ListItemLink(props) {

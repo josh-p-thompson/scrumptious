@@ -4,6 +4,7 @@ import './App.css';
 import Nav from './components/Nav/Nav.js'
 import FoodList from './components/FoodList/FoodList.js'
 import Controls from './components/Controls/Controls.js'
+import Map from './components/Map/Map.js'
 
 import restaurantsData from './example_restaurants.json'
 import articlesData from './example_articles.json'
@@ -15,7 +16,8 @@ import { ThemeProvider } from '@material-ui/styles';
 const theme = createMuiTheme({
   typography: {
     fontFamily: [
-      '"Merriweather"',
+      // '"Merriweather"',
+      '"Muli"',
     ].join(','),
     subtitle1: {
       "fontWeight": 700,
@@ -26,11 +28,24 @@ const theme = createMuiTheme({
 
 function App() {
   const [articles, setArticles] = useState([]);
-  const [selectedArticles, setSelectedArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [sortBy, setSortBy] = useState("distance");
+  const [clickedRestaurant, setClickedRestaurant] = useState({});
+  const [sortBy, setSortBy] = useState("mentions");
   const [cardsHidden, setCardsHidden] = useState(false);
+
+  const [viewport, setViewport] = useState({
+    width: 400,
+    height: 400,
+    latitude: 37.80766466839607,
+    longitude: -122.23316866515783,
+    zoom: 10.509440615422854
+  });
+  const [userLocation, setUserLocation] = useState({
+    lat: 37.80766466839607, 
+    lng: -122.23316866515783,
+  })
 
   // set articles and restaurants when component mounts
   useEffect(() => {
@@ -41,7 +56,7 @@ function App() {
   )
 
   const onSelectChange = (event, value) => {
-    setSelectedArticles(value);
+    setFilteredArticles(value);
     filterRestaurants(value);
   }
 
@@ -67,6 +82,23 @@ function App() {
     setCardsHidden(!cardsHidden);
   }
 
+  const onGeolocate = (inputs) => {
+    const lat = inputs.coords.latitude; 
+    const lng = inputs.coords.longitude;
+    setUserLocation({
+      lat: lat, 
+      lng: lng,
+    })
+  }
+
+  const onMarkerClick = (newClickedRestaurant) => {
+    if (newClickedRestaurant === clickedRestaurant) {
+      setClickedRestaurant({})
+    } else {
+      setClickedRestaurant(newClickedRestaurant);
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
     <div className="App">
@@ -74,7 +106,7 @@ function App() {
         <Nav />
         <Controls 
           articles={articles}
-          selectedArticles={selectedArticles}
+          filteredArticles={filteredArticles}
           onSelectChange={onSelectChange}
           toggleSelect={toggleCards}
           sortBy={sortBy}
@@ -86,8 +118,15 @@ function App() {
         />
       </div>
       <div className="MapContainer">
-        This is the Map
-        {/* <Map /> */}
+        <Map 
+          viewport={viewport}
+          setViewport={setViewport}
+          onGeolocate={onGeolocate}
+          restaurants={filteredRestaurants}
+          onMarkerClick={onMarkerClick}
+          clickedRestaurant={clickedRestaurant}
+          setClickedRestaurant={setClickedRestaurant}
+        />
       </div>
     </div>
     </ThemeProvider>
