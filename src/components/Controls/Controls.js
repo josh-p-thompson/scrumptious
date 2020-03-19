@@ -52,7 +52,7 @@ function Controls(props) {
                 toggleSelect={toggleSelect}
                 value={filteredArticles}
             />
-        ) :(<empty></empty>)
+        ) :(null)
         }
     </div>
   );

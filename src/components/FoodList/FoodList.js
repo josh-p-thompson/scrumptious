@@ -13,6 +13,7 @@ function FoodList(props) {
       restaurants.map( restaurant => (
         <ListCard 
           restaurant={restaurant}
+          key={restaurant.id}
         />
       ))
       }

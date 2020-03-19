@@ -58,5 +58,29 @@
             "publishDate": "2019-12-27T18:00:00.000Z"
           }
         ]
+      },
+      {
+        "id": 2,
+        "name": "Cheeseboard Pizza",
+        "address": "907 Washington St, Oakland, CA 94607",
+        "slug": "cosecha",
+        "gmaps": "https://www.google.com/maps/search/907%20Washington%20St%2C%20Oakland%2C%20CA%2094607%2C%20USA/37.8016405,-122.27491206666666",
+        "lat": 37.879877,
+        "lng": -122.269450,
+        "eaterMentions": 2,
+        "articles": [
+          {
+            "id": 0,
+            "title": "The 38 Essential East Bay Restaurants, Winter 2020",
+            "url": "https://sf.eater.com/maps/best-east-bay-oakland-berkeley-restaurants-38",
+            "publishDate": "2019-12-10T22:32:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Where to Eat Brunch on New Year’s Day",
+            "url": "https://sf.eater.com/maps/where-to-eat-new-years-day-restaurants-brunch-open",
+            "publishDate": "2019-12-27T18:00:00.000Z"
+          }
+        ]
       }
 ]

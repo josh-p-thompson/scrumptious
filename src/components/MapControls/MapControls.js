@@ -21,7 +21,6 @@ function MapControls(props) {
         <div className="MapControls">
             <GeolocateControl
             positionOptions={{enableHighAccuracy: true}}
-            trackUserLocation={true}
             style={geolocateStyle}
             onGeolocate={onGeolocate}
             />

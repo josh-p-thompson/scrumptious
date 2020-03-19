@@ -34,9 +34,13 @@ function ListItemLink(props) {
 
 function ListCard(props) {
   const {restaurant} = props;
-
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+
+  // string for distance
+  let dist = ""
+  if (restaurant.distance) {
+    dist = " | " + restaurant.distance + " mi"
+  }
 
   return (
     <Card className="ListCard" variant="outlined">
@@ -46,14 +50,14 @@ function ListCard(props) {
                 {restaurant.name}
             </Typography>
             <Typography variant="caption" color="textSecondary">
-            {restaurant.address.split(",")[1]} | XX mi
+            {restaurant.address.split(",")[1] + dist}
             </Typography>
         </div>
         <List component="nav" dense={true} className={classes.list} >
             <Divider component="li" />
             {
             restaurant.articles.map(article =>(
-            <div>
+            <div key={article.id}>
               <ListItemLink href={article.url + "/" + restaurant.slug} target="_blank" className={classes.listItem}>
                   <ListItemText primary={article.title} primaryTypographyProps={{variant: "caption", noWrap: true, display: "block"}}/>
               </ListItemLink>
