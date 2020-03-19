@@ -1,0 +1,25 @@
+.ListCard {
+    margin-top: .25rem;
+    margin-bottom: .25rem;
+}
+
+.ListCard:first-child {
+    margin-top: 0rem;
+}
+
+.ListCard:last-child {
+    margin-bottom: .5rem;
+}
+
+.ListCard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ListCard-eater {
+    width: 3rem;
+    height: 1rem;
+    right: 1rem;
+    padding: 12px;
+}
