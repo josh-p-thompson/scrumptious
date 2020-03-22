@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import './App.css';
 
 import Nav from './components/Nav/Nav.js'
 import FoodList from './components/FoodList/FoodList.js'
 import Controls from './components/Controls/Controls.js'
 import Map from './components/Map/Map.js'
-
-import restaurantsData from './example_restaurants.json'
-import articlesData from './example_articles.json'
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -26,6 +24,7 @@ const theme = createMuiTheme({
 
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [articles, setArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
@@ -46,44 +45,66 @@ function App() {
     lng: null,
   })
 
-  // set articles and restaurants when component mounts
+  // fetch articles on mount
   useEffect(() => {
-      setArticles(articlesData);
-      setRestaurants(restaurantsData);
-      setFilteredRestaurants(restaurantsData);
+    const fetchArticles = async () =>  {
+      const result_articles = await axios('/api/articles');
+      setArticles(result_articles.data);
+    }; 
+    fetchArticles();
     }, []
   )
-  
-  // used to calculate distance between user and restaurants
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    let R = 6371; // Radius of the earth in km
-    let dLat = deg2rad(lat2-lat1);  // deg2rad below
-    let dLon = deg2rad(lon2-lon1); 
-    let a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2); 
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    let d = R * c * 0.62137119; // Distance in miles
-    return d.toFixed(1);
-  }
-  const deg2rad = (deg) => {
-    return deg * (Math.PI/180)
-  }
 
-  // sets distance from user for each restaurant; called by geolocate
-  const setDistance = (lat, lng) => {
-    if (lat && lng) {
+  // fetch restaurants on mount and when userLocation updates
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      const result_restaurants = await axios(`/api/restaurants?lat=${userLocation.lat}&lng=${userLocation.lng}`);
+      setRestaurants(result_restaurants.data);
+      setFilteredRestaurants(result_restaurants.data);
+      setIsLoading(false);
+    }; 
+    fetchRestaurants();
+    }, [userLocation]
+  )
 
-      // kinda confused about why this is modifying state?? --> conclusion, do this stuff on the backend
-      let oldRestaurants = Object.assign([], restaurants);
-      console.log(oldRestaurants);
-      oldRestaurants.map(rest =>
-        rest['distance'] = calculateDistance(lat, lng, rest.lat, rest.lng)
-      ); 
+  // sort filteredRestaurants when sortBy selection changes or when filters change
+  useEffect(() => {
+    let sortedRestaurants = [...filteredRestaurants];
+    if (sortBy === "mentions") {
+      sortedRestaurants.sort(compareValues('eaterMentions'))
+    } else {
+      sortedRestaurants.sort(compareValues('distance', 'asc'))
     }
+    setFilteredRestaurants(sortedRestaurants);
+  }, [sortBy, filteredArticles]
+  )
+
+  // compare function for sorting
+  const compareValues = (key, order='desc') => {
+    return function innerSort(a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0;
+      }
+
+      const varA = (typeof a[key] === 'string')
+      ? a[key].toUpperCase() : a[key];
+      const varB = (typeof b[key] === 'string')
+      ? b[key].toUpperCase() : b[key];
+
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return (
+        (order === 'desc') ? (comparison * -1) : comparison
+      );
+    };
   }
 
+  
   // set filtered articles and filter restaurants
   const onSelectChange = (event, value) => {
     setFilteredArticles(value);
@@ -93,7 +114,7 @@ function App() {
   // filters restaurants based on articles provided
   const filterRestaurants = (value) => {
     if (value.length > 0) {
-      const articleIds = value.map(article => article.id)
+      const articleIds = value.map(article => article.id);
       const filteredRestaurants = restaurants.filter(restaurant => 
         restaurant.articles.some(article => articleIds.includes(article.id))
       );
@@ -109,13 +130,9 @@ function App() {
     }
   }
 
-
-
-
   const toggleCards = () => {
     setCardsHidden(!cardsHidden);
   }
-
 
   // controling the map
   const onGeolocate = (inputs) => {
@@ -124,12 +141,7 @@ function App() {
     setUserLocation({
       lat: lat, 
       lng: lng,
-    })
-    // only set distance if userLocation hasn't been set
-    if(userLocation.lat == null) {
-      setDistance(lat, lng);
-    }
-    
+    })    
   }
 
   const onMarkerClick = (newClickedRestaurant) => {
@@ -140,10 +152,7 @@ function App() {
     }
   }
 
-  const scrollToCard = (ref) => {
-    window.scrollTo(0, ref.current.offsetTop)
-  }
-
+  if (isLoading) return "loading";
 
   return (
     <ThemeProvider theme={theme}>

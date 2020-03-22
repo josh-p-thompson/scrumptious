@@ -6,7 +6,7 @@ import ListCard from "../ListCard/ListCard.js"
 function FoodList(props) {
   const {cardsHidden, restaurants} = props;
 
-  if (!cardsHidden) {
+  if (!cardsHidden && restaurants) {
     return (
       <div className="FoodList">
       {
@@ -20,7 +20,7 @@ function FoodList(props) {
       </div>
     );
   } else {
-    return (<div></div>)
+    return (null)
   }
 }
 

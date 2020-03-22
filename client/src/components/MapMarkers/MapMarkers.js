@@ -10,32 +10,36 @@ class MapMarkers extends PureComponent {
     render() {
       const {restaurants, onClick} = this.props;
 
-      return restaurants.map(rest =>
-        <Marker 
-        key={rest.id} 
-        longitude={rest.lng} 
-        latitude={rest.lat} 
-        >
-            <svg
-                height={SIZE}
-                viewBox="0 0 24 24"
-                style={{
-                    cursor: 'pointer',
-                    fill: '#f50057',
-                    opacity: "70%",
-                    stroke: 'black',
-                    transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
-                }}
-                onClick={() => onClick(rest)}
+      if (restaurants) {
+          return restaurants.map(rest =>
+            <Marker 
+            key={rest.id} 
+            longitude={rest.lng} 
+            latitude={rest.lat} 
             >
-                <path d={ICON} />
-            </svg>
-
-
-
-
-        </Marker>
-      )
+                <svg
+                    height={SIZE}
+                    viewBox="0 0 24 24"
+                    style={{
+                        cursor: 'pointer',
+                        fill: '#f50057',
+                        opacity: "70%",
+                        stroke: 'black',
+                        transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
+                    }}
+                    onClick={() => onClick(rest)}
+                >
+                    <path d={ICON} />
+                </svg>
+    
+    
+    
+    
+            </Marker>
+          )
+      } else {
+          return (null)
+      }
     }
 }
 export default MapMarkers;
