@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const pool = require('./db')
 
 const restaurantsData = require('../static/example_restaurants.json');
 const articlesData = require('../static/example_articles.json');
