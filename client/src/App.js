@@ -22,17 +22,15 @@ const theme = createMuiTheme({
   }
 });
 
-
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [articlesData, setArticlesData] = useState([]);
   const [articles, setArticles] = useState([]);
-  const [filteredArticles, setFilteredArticles] = useState([]);
+  const [restaurantsData, setRestaurantsData] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [clickedRestaurant, setClickedRestaurant] = useState({});
   const [sortBy, setSortBy] = useState("mentions");
   const [cardsHidden, setCardsHidden] = useState(false);
-
   const [viewport, setViewport] = useState({
     width: 400,
     height: 400,
@@ -45,38 +43,55 @@ function App() {
     lng: null,
   })
 
-  // fetch articles on mount
+  // fetch articlesData
   useEffect(() => {
     const fetchArticles = async () =>  {
       const result_articles = await axios('/api/articles');
-      setArticles(result_articles.data);
+      setArticlesData(result_articles.data);
     }; 
     fetchArticles();
     }, []
   )
 
-  // fetch restaurants on mount and when userLocation updates
+  // fetch restaurantsData
   useEffect(() => {
     const fetchRestaurants = async () => {
       const result_restaurants = await axios(`/api/restaurants?lat=${userLocation.lat}&lng=${userLocation.lng}`);
-      setRestaurants(result_restaurants.data);
-      setFilteredRestaurants(result_restaurants.data);
+      setRestaurantsData(result_restaurants.data);
+      if (userLocation.lat && userLocation.lng) {
+        setSortBy('distance');
+      }
       setIsLoading(false);
     }; 
     fetchRestaurants();
     }, [userLocation]
   )
 
-  // sort filteredRestaurants when sortBy selection changes or when filters change
+  // set restaurants based on articles selected
   useEffect(() => {
-    let sortedRestaurants = [...filteredRestaurants];
+    console.log('using effect');
+    if (articles.length > 0) {
+      const articleIds = articles.map(article => article.id);
+      const newRestaurants = restaurantsData.filter(restaurant => 
+        restaurant.articles.some(article => articleIds.includes(article.id))
+      );
+      setRestaurants(newRestaurants);
+    } else {
+      setRestaurants(restaurantsData); 
+    }
+  }, [articles, restaurantsData]
+  )
+
+  // sort restaurants by mentions or distance
+  useEffect(() => {
+    let sortedRestaurants = JSON.parse(JSON.stringify(restaurants));
     if (sortBy === "mentions") {
       sortedRestaurants.sort(compareValues('eaterMentions'))
     } else {
       sortedRestaurants.sort(compareValues('distance', 'asc'))
     }
-    setFilteredRestaurants(sortedRestaurants);
-  }, [sortBy, filteredArticles]
+    setRestaurants(sortedRestaurants);
+  }, [sortBy, articles]
   )
 
   // compare function for sorting
@@ -103,38 +118,21 @@ function App() {
       );
     };
   }
-
   
-  // set filtered articles and filter restaurants
-  const onSelectChange = (event, value) => {
-    setFilteredArticles(value);
-    filterRestaurants(value);
-  }
+  // set articles selected from filter
+  const onSelectChange = (event, value) => { setArticles(value) }
 
-  // filters restaurants based on articles provided
-  const filterRestaurants = (value) => {
-    if (value.length > 0) {
-      const articleIds = value.map(article => article.id);
-      const filteredRestaurants = restaurants.filter(restaurant => 
-        restaurant.articles.some(article => articleIds.includes(article.id))
-      );
-      setFilteredRestaurants(filteredRestaurants);
-    } else {
-      setFilteredRestaurants(restaurants); 
-    }
-  }
-
+  // changes sorting control buttons
   const onSortChange = (event, newSortBy) => {
     if (newSortBy) {
       setSortBy(newSortBy);
     }
   }
 
-  const toggleCards = () => {
-    setCardsHidden(!cardsHidden);
-  }
+  // toggles card visibility
+  const toggleCards = () => { setCardsHidden(!cardsHidden) }
 
-  // controling the map
+  // sets user location when geolocate is clicked
   const onGeolocate = (inputs) => {
     const lat = inputs.coords.latitude; 
     const lng = inputs.coords.longitude;
@@ -160,8 +158,8 @@ function App() {
       <div className="InfoContainer">
         <Nav />
         <Controls 
+          articlesData={articlesData}
           articles={articles}
-          filteredArticles={filteredArticles}
           onSelectChange={onSelectChange}
           toggleSelect={toggleCards}
           sortBy={sortBy}
@@ -169,7 +167,8 @@ function App() {
         />
         <FoodList 
           cardsHidden={cardsHidden}
-          restaurants={filteredRestaurants}
+          restaurants={restaurants}
+          setClickedRestaurant={setClickedRestaurant}
         />
       </div>
       <div className="MapContainer">
@@ -177,7 +176,7 @@ function App() {
           viewport={viewport}
           setViewport={setViewport}
           onGeolocate={onGeolocate}
-          restaurants={filteredRestaurants}
+          restaurants={restaurants}
           onMarkerClick={onMarkerClick}
           clickedRestaurant={clickedRestaurant}
           setClickedRestaurant={setClickedRestaurant}

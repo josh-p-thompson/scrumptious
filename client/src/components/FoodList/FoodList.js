@@ -4,7 +4,7 @@ import './FoodList.css';
 import ListCard from "../ListCard/ListCard.js"
 
 function FoodList(props) {
-  const {cardsHidden, restaurants} = props;
+  const {cardsHidden, restaurants, setClickedRestaurant} = props;
 
   if (!cardsHidden && restaurants) {
     return (
@@ -14,6 +14,7 @@ function FoodList(props) {
         <ListCard 
           restaurant={restaurant}
           key={restaurant.id}
+          setClickedRestaurant={setClickedRestaurant}
         />
       ))
       }
