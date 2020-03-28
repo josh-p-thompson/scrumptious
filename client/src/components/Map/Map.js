@@ -17,7 +17,7 @@ function Map(props) {
         mapStyle="mapbox://styles/joshua-p-thompson/ck746ul4r02a71ioeyvvik9lt"
         onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
-        maxZoom={17}
+        maxZoom={15}
         >
             <MapControls 
                 onGeolocate={onGeolocate}

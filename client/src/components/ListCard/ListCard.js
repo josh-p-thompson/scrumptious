@@ -6,13 +6,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
+import MapRoundedIcon from '@material-ui/icons/MapRounded';
 import RoomIcon from '@material-ui/icons/Room';
+import Typography from '@material-ui/core/Typography';
 
 
 const useStyles = makeStyles({
@@ -33,7 +34,7 @@ function ListItemLink(props) {
 }
 
 function ListCard(props) {
-  const {restaurant} = props;
+  const {restaurant, setClickedRestaurant} = props;
   const classes = useStyles();
 
   // string for distance
@@ -69,9 +70,14 @@ function ListCard(props) {
       </CardContent>
       <CardActions style={{justifyContent: 'space-between'}}>
         <Eater className="ListCard-eater" />
-        <IconButton href={restaurant.gmaps} target="_blank" >
-            <RoomIcon color="primary"/>
-        </IconButton>
+        <div>
+          <IconButton onClick={() => setClickedRestaurant(restaurant)} >
+              <MapRoundedIcon color="primary"/>
+          </IconButton>
+          <IconButton href={restaurant.gmaps} target="_blank" >
+              <RoomIcon color="primary"/>
+          </IconButton>
+        </div>
       </CardActions>
     </Card>
   );
