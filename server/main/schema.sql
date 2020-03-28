@@ -16,7 +16,7 @@ CREATE TABLE articles(
   publishDate timestamp NOT NULL
 );
 
-CREATE TABLE restaurants (
+CREATE TABLE restaurants(
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   address VARCHAR(255) NOT NULL,
@@ -48,3 +48,12 @@ INSERT INTO articles_restaurants (article_id, restaurant_id)
 VALUES 
 ((SELECT id FROM articles WHERE title = 'The 38 Essential East Bay Restaurants, Winter 2020'), (SELECT id FROM restaurants)),
 ((SELECT id FROM articles WHERE title = 'The Best Restaurants to Take Your Parents in San Francisco'), (SELECT id FROM restaurants));
+
+-- query to join restuarnats to article ids
+SELECT *
+FROM restaurants
+LEFT JOIN (
+  SELECT restaurant_id AS id, array_agg(article_id) AS articles_array
+  FROM articles_restaurants
+  GROUP BY restaurant_id
+) a using (id);

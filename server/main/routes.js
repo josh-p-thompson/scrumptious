@@ -1,9 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('./db')
+const pool = require('./db.js')
 
-const restaurantsData = require('../static/example_restaurants.json');
-const articlesData = require('../static/example_articles.json');
+/*
+
+POSTGRES QUERIES
+
+*/
+const queryArticles = 'SELECT * FROM articles ORDER BY title'; 
+
+const queryRestaurants = `
+	SELECT * 
+	FROM restaurants 
+	LEFT JOIN 
+		(SELECT restaurant_id AS id, array_agg(article_id) AS articles 
+		FROM articles_restaurants 
+		GROUP BY restaurant_id) a 
+	using (id)`;
+
+/*
+
+HELPER FUNCTIONS
+
+*/
 
 // used to calculate distance between user and restaurants
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -22,26 +41,61 @@ const deg2rad = (deg) => {
 	return deg * (Math.PI/180)
 }
 
-// returns restaurants; if lat/lng provided, calculates distance from location for each restaurant
+/*
+
+ROUTES
+
+*/
+
 router.get('/api/restaurants', (request, response) => {
 	let userLat = request.query.lat;
 	let userLng = request.query.lng;
 
-	if (userLat === "null" || userLng === "null") {
-		response.json(restaurantsData);
-	} else {
-		// deep copy
-		let restaurantsDataLocations = JSON.parse(JSON.stringify(restaurantsData));
-		// let restaurantsDataLocations = [...restaurantsData];
-		restaurantsDataLocations.map(rest =>
-			rest['distance'] = calculateDistance(rest.lat, rest.lng, userLat, userLng)
-		); 
-		response.json(restaurantsDataLocations);
-	}
-})
+	// query Articles
+	pool.query(queryArticles, (articles_error, articles_results) => {
+		if (articles_error) {
+			throw error;
+		};
+
+		const all_articles = articles_results.rows;
+		
+		// query Restaurants
+		pool.query(queryRestaurants, (error, results) => {
+			if (error) {
+				throw error
+			};
+
+			const restaurants = results.rows; 
+
+			// map articleIds to article objects
+			restaurants.map(rest => 
+				rest.articles.map((articleId, index) =>
+					rest.articles[index] = all_articles.find(element =>
+						element.id === articleId	
+					)
+				)
+			);
+	
+			if (userLat === "null" || userLng === "null") {
+				response.status(200).json(restaurants)
+			} else {		
+				restaurants.map(rest =>
+					rest['distance'] = calculateDistance(rest.lat, rest.lng, userLat, userLng)
+				);
+				response.status(200).json(restaurants);
+			}
+		}); 
+	});
+});
 
 router.get('/api/articles', (request, response) => {
-	response.json(articlesData);
+	pool.query(queryArticles, (error, results) => {
+		if (error) {
+		  throw error
+		}
+		response.status(200).json(results.rows)
+	})
 })
+
 
 module.exports = router
