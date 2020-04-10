@@ -19,19 +19,20 @@ def parse_googlemaps_id(text):
 def parse_lat(text): 
     if 'place_id' not in text: 
         coordinates = text.split('/')[-1]
-        return round(float(coordinates.split(',')[0]), 4)
+        return float(coordinates.split(',')[0])
 
 def parse_lng(text): 
     if 'place_id' not in text: 
         coordinates = text.split('/')[-1]
-        return round(float(coordinates.split(',')[1]), 4)
+        return float(coordinates.split(',')[1])
 
 def convert_id(text): 
     """ Returns lat and lng from place ID using Google Geocoder """
     GOOGLE_API_KEY = os.environ['GOOGLE_API_KEY']
     geo = GoogleV3(api_key=GOOGLE_API_KEY)
     location = geo.geocode(place_id=text)
-    return location.latitude, location.longitude
+    # remove ", USA" from end of location
+    return location.latitude, location.longitude, location.address[:-5].strip()
 
 class DuplicatesPipeline(object): 
     def __init__(self):
@@ -112,7 +113,7 @@ class RestaurantsPipeline(object):
         else:
             # geocode for lat lng if necessary
             if restaurant.googlemaps_id: 
-                restaurant.lat, restaurant.lng = convert_id(restaurant.googlemaps_id)
+                restaurant.lat, restaurant.lng, restaurant.address = convert_id(restaurant.googlemaps_id)
             # add article to restaurant.articles
             restaurant.articles.append(article)
             restaurant.article_count = 1
