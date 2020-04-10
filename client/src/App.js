@@ -86,7 +86,7 @@ function App() {
   useEffect(() => {
     let sortedRestaurants = JSON.parse(JSON.stringify(restaurants));
     if (sortBy === "mentions") {
-      sortedRestaurants.sort(compareValues('eaterMentions'))
+      sortedRestaurants.sort(compareValues('article_count'))
     } else {
       sortedRestaurants.sort(compareValues('distance', 'asc'))
     }

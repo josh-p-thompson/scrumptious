@@ -74,7 +74,7 @@ function ListCard(props) {
           <IconButton onClick={() => setClickedRestaurant(restaurant)} >
               <MapRoundedIcon color="primary"/>
           </IconButton>
-          <IconButton href={restaurant.gmaps} target="_blank" >
+          <IconButton href={restaurant.googlemaps_url} target="_blank" >
               <RoomIcon color="primary"/>
           </IconButton>
         </div>

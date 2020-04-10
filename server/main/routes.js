@@ -7,16 +7,17 @@ const pool = require('./db.js')
 POSTGRES QUERIES
 
 */
-const queryArticles = 'SELECT * FROM articles ORDER BY title'; 
+const queryArticles = 'SELECT * FROM article ORDER BY title'; 
 
 const queryRestaurants = `
 	SELECT * 
-	FROM restaurants 
+	FROM restaurant
 	LEFT JOIN 
 		(SELECT restaurant_id AS id, array_agg(article_id) AS articles 
-		FROM articles_restaurants 
+		FROM restaurant_article 
 		GROUP BY restaurant_id) a 
-	using (id)`;
+	using (id)
+	WHERE lat IS NOT NULL AND lng IS NOT NULL`;
 
 /*
 

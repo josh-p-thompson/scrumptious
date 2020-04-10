@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+requests = "*"
+beautifulsoup4 = "*"
+arrow = "*"
+sqlalchemy = "*"
+scrapy = "*"
+psycopg2-binary = "*"
+geopy = "*"
+
+[requires]
+python_version = "3.7"
