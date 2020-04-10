@@ -1,6 +1,12 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from eater.items import RestaurantItem
+from datetime import datetime
+
+def limit_by_date(text): 
+    publish_datetime = datetime.strptime(text, "%Y-%m-%dT%H:%M:%S")
+    if publish_datetime.year >= 2020: 
+        return True
 
 class ArticlesSpider(scrapy.Spider): 
     name = "articles"
@@ -14,11 +20,12 @@ class ArticlesSpider(scrapy.Spider):
             article_title = article.xpath(".//div//div//h2//a/text()").get()
             article_datetime = article.xpath(".//div//div//div//span//span//time/@datetime").get()
 
-            yield response.follow(article_url, self.parse_restaurants, meta={
-                'article_url': article_url, 
-                'article_title': article_title, 
-                'article_datetime': article_datetime
-            })
+            if limit_by_date(article_datetime): 
+                yield response.follow(article_url, self.parse_restaurants, meta={
+                    'article_url': article_url, 
+                    'article_title': article_title, 
+                    'article_datetime': article_datetime
+                })
 
         next_page = response.css(".c-pagination__next")
         for a in next_page: 

@@ -109,14 +109,12 @@ class RestaurantsPipeline(object):
             restaurant = exist_restaurant
             if article not in restaurant.articles: 
                 restaurant.articles.append(article)
-                restaurant.article_count = len(restaurant.articles)
         else:
             # geocode for lat lng if necessary
             if restaurant.googlemaps_id: 
                 restaurant.lat, restaurant.lng, restaurant.address = convert_id(restaurant.googlemaps_id)
             # add article to restaurant.articles
             restaurant.articles.append(article)
-            restaurant.article_count = 1
 
         try:
             session.add(restaurant)

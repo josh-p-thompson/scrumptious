@@ -53,4 +53,3 @@ class Restaurant(Base):
     lng = Column('lng', Float)
     articles = relationship('Article', secondary='restaurant_article',
         lazy='dynamic', backref="restaurant") 
-    article_count = Column('article_count', Integer)

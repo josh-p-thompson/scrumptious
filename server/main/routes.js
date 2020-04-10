@@ -10,7 +10,7 @@ POSTGRES QUERIES
 const queryArticles = 'SELECT * FROM article ORDER BY title'; 
 
 const queryRestaurants = `
-	SELECT * 
+	SELECT *, array_length(articles, 1) AS article_count
 	FROM restaurant
 	LEFT JOIN 
 		(SELECT restaurant_id AS id, array_agg(article_id) AS articles 
