@@ -75,7 +75,8 @@ DOWNLOAD_DELAY = 5.0
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'eater.pipelines.SaveRestaurantsPipeline': 300,
+   'eater.pipelines.DuplicatesPipeline': 100,
+   'eater.pipelines.RestaurantsPipeline': 200,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

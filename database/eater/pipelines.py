@@ -33,7 +33,35 @@ def convert_id(text):
     location = geo.geocode(place_id=text)
     return location.latitude, location.longitude
 
-class SaveRestaurantsPipeline(object):
+class DuplicatesPipeline(object): 
+    def __init__(self):
+        """
+        Initializes database connection and sessionmaker.
+        Creates tables.
+        """
+        engine = db_connect()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+        logging.info("****DuplicatesPipeline: database connected****")
+
+    def process_item(self, item, spider):
+        session = self.Session()
+        exist_restaurant = session.query(Restaurant).filter_by(slug = item['restaurant_slug']).first()
+        exist_article = session.query(Article).filter_by(url = item['article_url']).first()
+
+        is_duplicate = False
+        if exist_restaurant and exist_article: 
+            if exist_article in exist_restaurant.articles: 
+                is_duplicate = True
+
+        if is_duplicate:
+            raise DropItem(f"Duplicate item found: {item['restaurant_slug']} in {item['article_url']}")
+            session.close()
+        else:
+            return item
+            session.close()
+
+class RestaurantsPipeline(object):
     def __init__(self):
         """
         Initializes database connection and sessionmaker
@@ -42,6 +70,8 @@ class SaveRestaurantsPipeline(object):
         engine = db_connect()
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
+        logging.info("****SaveRestaurantsPipeline: database connected****")
+
 
 
     def process_item(self, item, spider):
