@@ -78,6 +78,13 @@ function App() {
   }, [restaurantsData]
   )
 
+  // reset cardsShown when restaurants change or when sorting is applied
+  useEffect(() => {
+    console.log('USE EFFECT: reset cardsShown');
+    setCardsShown(20);
+  }, [restaurants, sortBy]
+  )
+
   // set articles selected from filter
   const onSelectChange = (event, value) => { 
     console.log("onSelectChange: setting articles from filter");
