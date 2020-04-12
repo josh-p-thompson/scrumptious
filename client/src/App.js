@@ -28,16 +28,10 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [restaurantsData, setRestaurantsData] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+  const [cardsShown, setCardsShown] = useState(20);
   const [clickedRestaurant, setClickedRestaurant] = useState({});
   const [sortBy, setSortBy] = useState("mentions");
   const [cardsHidden, setCardsHidden] = useState(false);
-  const [viewport, setViewport] = useState({
-    width: 400,
-    height: 400,
-    latitude: 37.80766466839607,
-    longitude: -122.23316866515783,
-    zoom: 10.509440615422854
-  });
   const [userLocation, setUserLocation] = useState({
     lat: null, 
     lng: null,
@@ -45,6 +39,7 @@ function App() {
 
   // fetch articlesData
   useEffect(() => {
+    console.log('USE EFFECT: fetching article data');
     const fetchArticles = async () =>  {
       const result_articles = await axios('/api/articles');
       setArticlesData(result_articles.data);
@@ -55,6 +50,7 @@ function App() {
 
   // fetch restaurantsData
   useEffect(() => {
+    console.log('USE EFFECT: fetching restaurant data');
     const fetchRestaurants = async () => {
       const result_restaurants = await axios(`/api/restaurants?lat=${userLocation.lat}&lng=${userLocation.lng}`);
       setRestaurantsData(result_restaurants.data);
@@ -69,7 +65,7 @@ function App() {
 
   // set restaurants based on articles selected
   useEffect(() => {
-    console.log('using effect');
+    console.log('USE EFFECT: set restaurants from articles');
     if (articles.length > 0) {
       const articleIds = articles.map(article => article.id);
       const newRestaurants = restaurantsData.filter(restaurant => 
@@ -79,61 +75,45 @@ function App() {
     } else {
       setRestaurants(restaurantsData); 
     }
-  }, [articles, restaurantsData]
+  }, [restaurantsData]
   )
 
-  // sort restaurants by mentions or distance
-  useEffect(() => {
-    let sortedRestaurants = JSON.parse(JSON.stringify(restaurants));
-    if (sortBy === "mentions") {
-      sortedRestaurants.sort(compareValues('article_count'))
-    } else {
-      sortedRestaurants.sort(compareValues('distance', 'asc'))
-    }
-    setRestaurants(sortedRestaurants);
-  }, [sortBy, articles]
-  )
-
-  // compare function for sorting
-  const compareValues = (key, order='desc') => {
-    return function innerSort(a, b) {
-      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-        // property doesn't exist on either object
-        return 0;
-      }
-
-      const varA = (typeof a[key] === 'string')
-      ? a[key].toUpperCase() : a[key];
-      const varB = (typeof b[key] === 'string')
-      ? b[key].toUpperCase() : b[key];
-
-      let comparison = 0;
-      if (varA > varB) {
-        comparison = 1;
-      } else if (varA < varB) {
-        comparison = -1;
-      }
-      return (
-        (order === 'desc') ? (comparison * -1) : comparison
-      );
-    };
-  }
-  
   // set articles selected from filter
-  const onSelectChange = (event, value) => { setArticles(value) }
+  const onSelectChange = (event, value) => { 
+    console.log("onSelectChange: setting articles from filter");
+    setArticles(value);
+  }
+
+  const onApplyFilter = () => {
+    console.log('onApplyFilter: set restaurants from articles');
+    if (articles.length > 0) {
+      const articleIds = articles.map(article => article.id);
+      const newRestaurants = restaurantsData.filter(restaurant => 
+        restaurant.articles.some(article => articleIds.includes(article.id))
+      );
+      setRestaurants(newRestaurants);
+    } else {
+      setRestaurants(restaurantsData); 
+    }
+  }
 
   // changes sorting control buttons
   const onSortChange = (event, newSortBy) => {
+    console.log('onSortChange: changing sorting control buttons');
     if (newSortBy) {
       setSortBy(newSortBy);
     }
   }
 
   // toggles card visibility
-  const toggleCards = () => { setCardsHidden(!cardsHidden) }
+  const toggleCards = () => { 
+    console.log('toggleCards: toggling card visibility');
+    setCardsHidden(!cardsHidden);
+  }
 
   // sets user location when geolocate is clicked
   const onGeolocate = (inputs) => {
+    console.log('onGeolocate: setting user location from geolocate click');
     const lat = inputs.coords.latitude; 
     const lng = inputs.coords.longitude;
     setUserLocation({
@@ -143,6 +123,7 @@ function App() {
   }
 
   const onMarkerClick = (newClickedRestaurant) => {
+    console.log('onMarkerClick: setting clicked restaurant');
     if (newClickedRestaurant === clickedRestaurant) {
       setClickedRestaurant({})
     } else {
@@ -164,17 +145,20 @@ function App() {
           toggleSelect={toggleCards}
           sortBy={sortBy}
           onSortChange={onSortChange}
+          cardsHidden={cardsHidden}
+          onApplyFilter = {onApplyFilter}
         />
         <FoodList 
           cardsHidden={cardsHidden}
+          cardsShown={cardsShown}
+          setCardsShown={setCardsShown}
           restaurants={restaurants}
           setClickedRestaurant={setClickedRestaurant}
+          sortBy={sortBy}
         />
       </div>
       <div className="MapContainer">
         <Map 
-          viewport={viewport}
-          setViewport={setViewport}
           onGeolocate={onGeolocate}
           restaurants={restaurants}
           onMarkerClick={onMarkerClick}

@@ -3,16 +3,12 @@ import './Controls.css';
 import SelectLists from '../SelectLists/SelectLists.js'
 
 import Button from '@material-ui/core/Button';
-import TuneIcon from '@material-ui/icons/Tune';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 function Controls(props) {
-    const {articlesData, articles, onSelectChange, toggleSelect, sortBy, onSortChange} = props;
-
-    const [isFiltered, setFilter] = useState(false);
-
-    const toggleFilter = () => setFilter(!isFiltered);
+    const {articlesData, articles, onSelectChange, toggleSelect, sortBy, onSortChange, onApplyFilter} = props;
     
     const children = [
         <ToggleButton key={1} value="mentions" style={{fontSize: ".8rem", fontWeight: 700}} disableRipple={true}>
@@ -29,10 +25,10 @@ function Controls(props) {
             <Button
             variant="contained"
             color="secondary"
-            startIcon={<TuneIcon />}
+            startIcon={<RefreshIcon />}
             disableElevation={true}
             style={{fontSize: ".8rem", fontWeight: 700}}
-            onClick={toggleFilter}
+            onClick={onApplyFilter}
             >
                 Filter
             </Button>
@@ -44,16 +40,12 @@ function Controls(props) {
                 {children}
             </ToggleButtonGroup>
         </div>
-        {
-        isFiltered ? (
-            <SelectLists
-                options={articlesData}
-                onChange={onSelectChange}
-                toggleSelect={toggleSelect}
-                value={articles}
-            />
-        ) :(null)
-        }
+        <SelectLists
+            options={articlesData}
+            onChange={onSelectChange}
+            toggleSelect={toggleSelect}
+            value={articles}
+        />
     </div>
   );
 }

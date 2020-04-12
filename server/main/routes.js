@@ -81,7 +81,7 @@ router.get('/api/restaurants', (request, response) => {
 				response.status(200).json(restaurants)
 			} else {		
 				restaurants.map(rest =>
-					rest['distance'] = calculateDistance(rest.lat, rest.lng, userLat, userLng)
+					rest['distance'] = parseFloat(calculateDistance(rest.lat, rest.lng, userLat, userLng))
 				);
 				response.status(200).json(restaurants);
 			}
