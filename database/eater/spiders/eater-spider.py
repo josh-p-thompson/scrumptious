@@ -5,7 +5,7 @@ from datetime import datetime
 
 def limit_by_date(text): 
     publish_datetime = datetime.strptime(text, "%Y-%m-%dT%H:%M:%S")
-    if publish_datetime.year >= 2020: 
+    if publish_datetime.year >= 2017: 
         return True
 
 class ArticlesSpider(scrapy.Spider): 
