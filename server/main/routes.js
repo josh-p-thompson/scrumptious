@@ -7,16 +7,17 @@ const pool = require('./db.js')
 POSTGRES QUERIES
 
 */
-const queryArticles = 'SELECT * FROM articles ORDER BY title'; 
+const queryArticles = 'SELECT * FROM article ORDER BY title'; 
 
 const queryRestaurants = `
-	SELECT * 
-	FROM restaurants 
+	SELECT *, array_length(articles, 1) AS article_count
+	FROM restaurant
 	LEFT JOIN 
 		(SELECT restaurant_id AS id, array_agg(article_id) AS articles 
-		FROM articles_restaurants 
+		FROM restaurant_article 
 		GROUP BY restaurant_id) a 
-	using (id)`;
+	using (id)
+	WHERE lat IS NOT NULL AND lng IS NOT NULL`;
 
 /*
 
@@ -80,7 +81,7 @@ router.get('/api/restaurants', (request, response) => {
 				response.status(200).json(restaurants)
 			} else {		
 				restaurants.map(rest =>
-					rest['distance'] = calculateDistance(rest.lat, rest.lng, userLat, userLng)
+					rest['distance'] = parseFloat(calculateDistance(rest.lat, rest.lng, userLat, userLng))
 				);
 				response.status(200).json(restaurants);
 			}

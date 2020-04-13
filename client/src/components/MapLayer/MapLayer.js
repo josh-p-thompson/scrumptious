@@ -1,6 +1,3 @@
-// USED FOR RENDERING GEOJSON. GOING TO GO THE MARKER ROUTE.
-
-
 import React from 'react';
 import {Source, Layer} from 'react-map-gl';
 
@@ -19,6 +16,7 @@ const dataLayer = {
 }
 
 const toGeojson = (restaurants) => {
+    console.log('converting to geojson');
     let features = [];
     for (let rest of restaurants) {
         let point = {
@@ -37,7 +35,7 @@ const toGeojson = (restaurants) => {
     };
 }
 
-function MapRestaurants(props) {
+function MapLayer(props) {
     const {restaurants} = props;
 
     const data = toGeojson(restaurants);
@@ -49,4 +47,4 @@ function MapRestaurants(props) {
     );
 }
 
-export default MapRestaurants;
+export default MapLayer;
