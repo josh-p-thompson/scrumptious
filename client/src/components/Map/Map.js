@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import ReactMapGL, {GeolocateControl, NavigationControl} from 'react-map-gl';
+import ReactMapGL from 'react-map-gl';
 
 import MapControls from '../MapControls/MapControls.js'
-import MapMarkers from '../MapMarkers/MapMarkers.js'
 import MapPopup from '../MapPopup/MapPopup.js'
 import MapLayer from '../MapLayer/MapLayer.js'
 import memoMap from './memoMap.js'
@@ -12,7 +11,7 @@ const MAPBOX_TOKEN = "pk.eyJ1Ijoiam9zaHVhLXAtdGhvbXBzb24iLCJhIjoiY2s0cnc3MXdkMDA
 function Map(props) {
     console.log('rendering Map');
 
-    const {onGeolocate, restaurants, onMarkerClick, clickedRestaurant, setClickedRestaurant} = props;
+    const {onGeolocate, restaurantsGeojson, onMapClick, clickedRestaurant, setClickedRestaurant} = props;
 
     const [viewport, setViewport] = useState({
         width: 400,
@@ -31,17 +30,15 @@ function Map(props) {
         onViewportChange={nextViewport => setViewport(nextViewport)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         maxZoom={17}
+        interactiveLayerIds={["unclustered-point"]}
+        onClick={onMapClick}
         >
             <MapControls 
                 onGeolocate={onGeolocate}
             />
-            <MapMarkers 
-                restaurants={restaurants}
-                onClick={onMarkerClick}
+            <MapLayer
+                restaurantsGeojson={restaurantsGeojson}
             />
-            {/* <MapLayer
-                restaurants={restaurants}
-            /> */}
             {
             Object.keys(clickedRestaurant).length > 0 ? (
             <MapPopup 
@@ -54,4 +51,4 @@ function Map(props) {
     );
 }
 
-export default memoMap(Map, ['restaurants', 'clickedRestaurant']);
+export default memoMap(Map, ['restaurantsGeojson', 'clickedRestaurant']);

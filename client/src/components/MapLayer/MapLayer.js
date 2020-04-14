@@ -1,12 +1,36 @@
 import React from 'react';
 import {Source, Layer} from 'react-map-gl';
 
-// data layer
-const dataLayer = {
-    id: 'data',
+const clusterLayer = {
+    id: 'clusters',
+    type: 'circle',
+    source: 'restaurants',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': ['step', ['get', 'point_count'], '#f28cb1', 100, '#f1f075', 750, '#f1f075'],
+      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
+    }
+};
+
+const clusterCountLayer = {
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'restaurants',
+    filter: ['has', 'point_count'],
+    layout: {
+      'text-field': '{point_count_abbreviated}',
+      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 12
+    }
+};
+
+const unclusteredPointLayer = {
+    id: 'unclustered-point',
+    source: 'restaurants',
+    filter: ['!', ['has', 'point_count']],
     type: 'symbol',
     layout: {
-      'icon-image': 'restaurant-15',
+      'icon-image': 'marker',
       'icon-allow-overlap': true,
       'icon-anchor': 'bottom',
       'icon-size': 1.5,
@@ -15,34 +39,20 @@ const dataLayer = {
     }
 }
 
-const toGeojson = (restaurants) => {
-    console.log('converting to geojson');
-    let features = [];
-    for (let rest of restaurants) {
-        let point = {
-            "geometry": {
-                "type": "Point", 
-                "coordinates": [rest.lng, rest.lat]
-            }, 
-            "type": "Feature", 
-            "properties": rest
-        };
-        features.push(point);
-    }
-    return {
-        "type": "FeatureCollection",
-        "features": features
-    };
-}
-
 function MapLayer(props) {
-    const {restaurants} = props;
-
-    const data = toGeojson(restaurants);
-
+    console.log('rendering MapLayer');
+    const {restaurantsGeojson} = props;
     return (
-    <Source type="geojson" data={data}>
-        <Layer {...dataLayer} />
+    <Source 
+        type="geojson" 
+        data={restaurantsGeojson}
+        cluster={true}
+        clusterMaxZoom={13}
+        clusterRadius={50}
+    >
+        <Layer {...clusterLayer} />
+        <Layer {...clusterCountLayer} />
+        <Layer {...unclusteredPointLayer} />
     </Source>
     );
 }
