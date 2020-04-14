@@ -28,6 +28,7 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [restaurantsData, setRestaurantsData] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+  const [restaurantsGeojson, setRestaurantsGeojson] = useState({});
   const [cardsShown, setCardsShown] = useState(20);
   const [clickedRestaurant, setClickedRestaurant] = useState({});
   const [sortBy, setSortBy] = useState("mentions");
@@ -76,6 +77,28 @@ function App() {
       setRestaurants(restaurantsData); 
     }
   }, [restaurantsData]
+  )
+
+  // set restaurantsGeojson from restaurants
+  useEffect(() => {
+    console.log('USE EFFECT: set restaurantsGeojson from restaurants');
+    let features = [];
+    for (let rest of restaurants) {
+        let point = {
+            "geometry": {
+                "type": "Point", 
+                "coordinates": [rest.lng, rest.lat]
+            }, 
+            "type": "Feature", 
+            "properties": rest
+        };
+        features.push(point);
+    };
+    setRestaurantsGeojson({
+        "type": "FeatureCollection",
+        "features": features
+    });
+  }, [restaurants]
   )
 
   // reset cardsShown when restaurants change or when sorting is applied
@@ -129,12 +152,10 @@ function App() {
     })    
   }
 
-  const onMarkerClick = (newClickedRestaurant) => {
-    console.log('onMarkerClick: setting clicked restaurant');
-    if (newClickedRestaurant === clickedRestaurant) {
-      setClickedRestaurant({})
-    } else {
-      setClickedRestaurant(newClickedRestaurant);
+  const onMapClick = event => {
+    console.log('onMapClick: setting clicked restaurant');
+    if (event.features.length !== 0){
+      setClickedRestaurant(event.features[0]['properties']);
     }
   }
 
@@ -167,8 +188,8 @@ function App() {
       <div className="MapContainer">
         <Map 
           onGeolocate={onGeolocate}
-          restaurants={restaurants}
-          onMarkerClick={onMarkerClick}
+          restaurantsGeojson={restaurantsGeojson}
+          onMapClick={onMapClick}
           clickedRestaurant={clickedRestaurant}
           setClickedRestaurant={setClickedRestaurant}
         />
