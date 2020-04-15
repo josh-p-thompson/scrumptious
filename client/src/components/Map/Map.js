@@ -4,22 +4,14 @@ import ReactMapGL from 'react-map-gl';
 import MapControls from '../MapControls/MapControls.js'
 import MapPopup from '../MapPopup/MapPopup.js'
 import MapLayer from '../MapLayer/MapLayer.js'
-import memoMap from './memoMap.js'
+import memoUtil from '../../utils/memoUtil.js'
 
 const MAPBOX_TOKEN = "pk.eyJ1Ijoiam9zaHVhLXAtdGhvbXBzb24iLCJhIjoiY2s0cnc3MXdkMDAxYTNtbzB5dno2NTgyMyJ9.-74N1PZ3SAwMrzPw66TyEQ"
 
 function Map(props) {
     console.log('rendering Map');
 
-    const {onGeolocate, restaurantsGeojson, onMapClick, clickedRestaurant, setClickedRestaurant} = props;
-
-    const [viewport, setViewport] = useState({
-        width: 400,
-        height: 400,
-        latitude: 37.7830725948267,
-        longitude: -122.41937128686605,
-        zoom: 12,
-    });
+    const {viewport, setViewport, onGeolocate, restaurantsGeojson, onMapClick, clickedRestaurant, setClickedRestaurant, setClickedPopup} = props;
 
     return (
         <ReactMapGL
@@ -43,7 +35,7 @@ function Map(props) {
             Object.keys(clickedRestaurant).length > 0 ? (
             <MapPopup 
                 restaurant={clickedRestaurant}
-                onClose={setClickedRestaurant}
+                setClickedPopup={setClickedPopup}
             />
             ) : (null)
             }
@@ -51,4 +43,4 @@ function Map(props) {
     );
 }
 
-export default memoMap(Map, ['restaurantsGeojson', 'clickedRestaurant']);
+export default memoUtil(Map, ['restaurantsGeojson', 'clickedRestaurant', 'viewport']);

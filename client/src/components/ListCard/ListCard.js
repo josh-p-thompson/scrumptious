@@ -11,14 +11,13 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import MapRoundedIcon from '@material-ui/icons/MapRounded';
-import RoomIcon from '@material-ui/icons/Room';
+import MapTwoToneIcon from '@material-ui/icons/MapTwoTone';
+import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 import Typography from '@material-ui/core/Typography';
-
 
 const useStyles = makeStyles({
   cardContent: {
-      paddingBottom: 0,
+    paddingBottom: 0,
   }, 
   list: {
     paddingBottom: 0,
@@ -34,14 +33,8 @@ function ListItemLink(props) {
 }
 
 function ListCard(props) {
-  const {restaurant, setClickedRestaurant} = props;
+  const {restaurant, onCardMapClick} = props;
   const classes = useStyles();
-
-  // string for distance
-  let dist = ""
-  if (restaurant.distance) {
-    dist = " | " + restaurant.distance + " mi"
-  }
 
   return (
     <Card className="ListCard" variant="outlined">
@@ -50,8 +43,14 @@ function ListCard(props) {
             <Typography variant="subtitle1">
                 {restaurant.name}
             </Typography>
-            <Typography variant="caption" color="textSecondary">
-            {restaurant.address.split(",")[1] + dist}
+            <Typography variant="caption" color="textSecondary" >
+            {
+              restaurant.distance ? (
+                restaurant.distance + " mi"
+              ):(
+                restaurant.address.split(",")[1]
+              )
+            }
             </Typography>
         </div>
         <List component="nav" dense={true} className={classes.list} >
@@ -71,11 +70,11 @@ function ListCard(props) {
       <CardActions style={{justifyContent: 'space-between'}}>
         <Eater className="ListCard-eater" />
         <div>
-          <IconButton onClick={() => setClickedRestaurant(restaurant)} >
-              <MapRoundedIcon color="primary"/>
+          <IconButton onClick={() => onCardMapClick(restaurant)} >
+              <MapTwoToneIcon color="primary"/>
           </IconButton>
           <IconButton href={restaurant.googlemaps_url} target="_blank" >
-              <RoomIcon color="primary"/>
+              <RoomTwoToneIcon color="primary"/>
           </IconButton>
         </div>
       </CardActions>

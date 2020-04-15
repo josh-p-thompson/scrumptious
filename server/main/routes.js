@@ -17,7 +17,8 @@ const queryRestaurants = `
 		FROM restaurant_article 
 		GROUP BY restaurant_id) a 
 	using (id)
-	WHERE lat IS NOT NULL AND lng IS NOT NULL`;
+	WHERE lat IS NOT NULL AND lng IS NOT NULL
+	ORDER BY article_count DESC`;
 
 /*
 
