@@ -19,12 +19,15 @@ const useStyles = makeStyles({
     option: {
         fontSize: '.8rem',
         padding: 4, 
+        height: '3rem'
     }
 });
 
 
 function SelectLists(props) {
-    const {options, onChange, toggleSelect, value} = props;
+    const {options, onChange, value, inputValue, handleInputChange} = props;
+
+    console.log('rendering SelectLists');
     
     const classes = useStyles();
     
@@ -32,27 +35,17 @@ function SelectLists(props) {
     <div className="SelectLists">
         <Autocomplete
             multiple
-            disableListWrap
+            filterSelectedOptions
             classes={classes}
             id="select-lists"
             options={options}
             value={value}
             onChange={onChange}
-            onOpen={toggleSelect}
-            onClose={toggleSelect}
             disableCloseOnSelect
+            disableListWrap
+            inputValue={inputValue}
+            onInputChange={handleInputChange}
             getOptionLabel={option => option.title}
-            renderOption={(option, { selected }) => (
-                <React.Fragment>
-                <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                />
-                {option.title}
-                </React.Fragment>
-            )}
             renderInput={params => (
                 <TextField 
                     {...params} 

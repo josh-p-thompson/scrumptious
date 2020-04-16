@@ -8,7 +8,9 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 function Controls(props) {
-    const {articlesData, articles, onSelectChange, toggleSelect, sortBy, onSortChange, onApplyFilter} = props;
+    const {articlesData, onSelectChange, selectValue, sortBy, onSortChange, onApplyFilter, inputValue, handleInputChange} = props;
+
+    console.log('rendering Controls');
     
     const children = [
         <ToggleButton key={1} value="mentions" style={{fontSize: ".8rem", fontWeight: 700}} disableRipple={true}>
@@ -19,7 +21,16 @@ function Controls(props) {
         </ToggleButton>,
     ];
 
-  return (
+    if (articlesData.length === 0) {
+        return (
+            <div className="Controls">
+                <div className="Controls-buttons">
+                </div>
+            </div>
+        )
+    }
+
+    return (
     <div className="Controls">
         <div className="Controls-buttons">
             <Button
@@ -43,11 +54,12 @@ function Controls(props) {
         <SelectLists
             options={articlesData}
             onChange={onSelectChange}
-            toggleSelect={toggleSelect}
-            value={articles}
+            value={selectValue}
+            inputValue={inputValue}
+            handleInputChange={handleInputChange}
         />
     </div>
-  );
+    );
 }
 
 export default Controls;

@@ -15,7 +15,7 @@ def db_connect():
     Performs database connection using database settings from settings.py.
     Returns sqlalchemy engine instance
     """
-    return create_engine(get_project_settings().get("CONNECTION_STRING"))
+    return create_engine(get_project_settings().get("CONNECTION_STRING"), pool_size=20, max_overflow=20)
 
 
 def create_table(engine):
