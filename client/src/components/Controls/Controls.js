@@ -21,7 +21,16 @@ function Controls(props) {
         </ToggleButton>,
     ];
 
-  return (
+    if (articlesData.length === 0) {
+        return (
+            <div className="Controls">
+                <div className="Controls-buttons">
+                </div>
+            </div>
+        )
+    }
+
+    return (
     <div className="Controls">
         <div className="Controls-buttons">
             <Button
@@ -50,7 +59,7 @@ function Controls(props) {
             handleInputChange={handleInputChange}
         />
     </div>
-  );
+    );
 }
 
 export default Controls;

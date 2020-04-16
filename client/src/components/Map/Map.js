@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import ReactMapGL from 'react-map-gl';
+import React from 'react';
 
 import MapControls from '../MapControls/MapControls.js'
 import MapPopup from '../MapPopup/MapPopup.js'
 import MapLayer from '../MapLayer/MapLayer.js'
 import memoUtil from '../../utils/memoUtil.js'
+
+import ReactMapGL from 'react-map-gl';
 
 const MAPBOX_TOKEN = "pk.eyJ1Ijoiam9zaHVhLXAtdGhvbXBzb24iLCJhIjoiY2s0cnc3MXdkMDAxYTNtbzB5dno2NTgyMyJ9.-74N1PZ3SAwMrzPw66TyEQ"
 

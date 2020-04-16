@@ -7,7 +7,6 @@ import Nav from './components/Nav/Nav.js'
 import FoodList from './components/FoodList/FoodList.js'
 import Controls from './components/Controls/Controls.js'
 import Map from './components/Map/Map.js'
-import LoadingSkeleton from './components/LoadingSkeleton/LoadingSkeleton.js'
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -25,7 +24,6 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [pageLoading, setPageLoading] = useState(true);
   const [articlesData, setArticlesData] = useState([]);
   const [articles, setArticles] = useState([]);
   const [restaurantsData, setRestaurantsData] = useState([]);
@@ -107,7 +105,6 @@ function App() {
       if (userLocation.lat && userLocation.lng) {
         setSortBy('distance');
       }
-      setPageLoading(false);
     }; 
     fetchRestaurants();
     }, [userLocation]
@@ -315,12 +312,6 @@ function App() {
     }
   }
 
-  if (pageLoading) {
-    return (
-      <LoadingSkeleton />
-    )
-  }
-
   return (
     <ThemeProvider theme={theme}>
     <div className="App" style={appStyle}>
@@ -334,7 +325,6 @@ function App() {
       <div className="InfoContainer">
         <Controls 
           articlesData={articlesData}
-          articles={articles}
           onSelectChange={onSelectChange}
           selectValue={articles}
           sortBy={sortBy}
