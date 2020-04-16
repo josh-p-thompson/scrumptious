@@ -11,7 +11,7 @@ const MAPBOX_TOKEN = "pk.eyJ1Ijoiam9zaHVhLXAtdGhvbXBzb24iLCJhIjoiY2s0cnc3MXdkMDA
 function Map(props) {
     console.log('rendering Map');
 
-    const {viewport, setViewport, onGeolocate, restaurantsGeojson, onMapClick, clickedRestaurant, setClickedRestaurant, setClickedPopup} = props;
+    const {viewport, setViewport, onGeolocate, restaurantsGeojson, onMapClick, clickedRestaurant, onPopupClick} = props;
 
     return (
         <ReactMapGL
@@ -35,7 +35,7 @@ function Map(props) {
             Object.keys(clickedRestaurant).length > 0 ? (
             <MapPopup 
                 restaurant={clickedRestaurant}
-                setClickedPopup={setClickedPopup}
+                onPopupClick={onPopupClick}
             />
             ) : (null)
             }

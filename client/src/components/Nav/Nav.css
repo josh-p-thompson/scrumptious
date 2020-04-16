@@ -1,12 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans:500&display=swap');
 
 .Nav {
-  padding: 1rem;
+  padding-right: .5rem;
+  padding-left: .75rem;
+  padding-top: 1rem; 
+  padding-bottom: 1rem;   
   background-color: #fff;
   font-family: 'Fira Sans', sans-serif;
   font-size: 1.5rem;
-}
-
-.Nav-logo {
-  height: 4rem;
+  display: flex; 
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }

@@ -7,6 +7,7 @@ import Nav from './components/Nav/Nav.js'
 import FoodList from './components/FoodList/FoodList.js'
 import Controls from './components/Controls/Controls.js'
 import Map from './components/Map/Map.js'
+import LoadingSkeleton from './components/LoadingSkeleton/LoadingSkeleton.js'
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -25,22 +26,16 @@ const theme = createMuiTheme({
 
 function App() {
   const [pageLoading, setPageLoading] = useState(true);
-  // const [filterLoading, setFilterLoading] = useState(false);
-
   const [articlesData, setArticlesData] = useState([]);
   const [articles, setArticles] = useState([]);
   const [restaurantsData, setRestaurantsData] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [restaurantsGeojson, setRestaurantsGeojson] = useState({});
-  
   const [clickedRestaurant, setClickedRestaurant] = useState({});
   const [sortBy, setSortBy] = useState("mentions");
   const [clickedPopup, setClickedPopup] = useState({});
-
   const [inputValue, setInputValue] = useState('');
-
   const [cardsShown, setCardsShown] = useState(20);
-
   const [userLocation, setUserLocation] = useState({
     lat: null, 
     lng: null,
@@ -52,9 +47,13 @@ function App() {
     longitude: -122.41937128686605,
     zoom: 12,
   });
-
   const [width, setWidth] = useState(window.innerWidth);
   const [mobile, setMobile] = useState(false);
+  const [mobileView, setMobileView] = useState('list');
+
+  const [appStyle, setAppStyle] = useState({})
+  const [navContainerStyle, setNavContainerStyle] = useState({})
+  const [mapContainerStyle, setMapContainerStyle] = useState({})
 
   // set window width
   useEffect(() => {
@@ -75,6 +74,17 @@ function App() {
       setMobile(false);
     }
   }, [width]
+  )
+
+  // modify styles if mobile changes
+  useEffect(() => {
+    if (mobile) {
+      styleMobileMap();
+      setMobileView('list');
+    } else {
+      clearStyles();
+    }
+  }, [mobile]
   )
 
   // fetch articlesData
@@ -162,6 +172,38 @@ function App() {
   }, [sortBy]
   )
 
+  // toggles mobileView
+  const toggleMobileView = () => {
+    if (mobileView === 'map') {
+      setMobileView('list'); 
+      styleMobileMap();
+    } else {
+      setMobileView('map')
+      styleMobileList();
+    }
+  }
+
+  // change styles for mobile map view
+  const styleMobileMap = () => {
+    setAppStyle({gridTemplateColumns: "0 auto"});
+    setNavContainerStyle({gridColumn: "2"}); 
+    setMapContainerStyle({gridRow: "2"}); 
+  }
+
+  // change styles for mobile list view
+  const styleMobileList = () => {
+    setAppStyle({gridTemplateColumns: "auto 0"})
+    setNavContainerStyle({}); 
+    setMapContainerStyle({}); 
+  }
+
+  // clear styles for non-mobile
+  const clearStyles = () => {
+    setAppStyle({}); 
+    setNavContainerStyle({}); 
+    setMapContainerStyle({}); 
+  }
+
   // set articles selected from filter
   const onSelectChange = (event, value) => { 
     console.log("onSelectChange: setting articles from filter");
@@ -216,6 +258,9 @@ function App() {
   // when card map icon is clicked
   const onCardMapClick = restaurant => {
     console.log('onCardMapClick: setting clicked restaurant');
+    if (mobile) {
+      toggleMobileView();
+    }
     setClickedRestaurant(restaurant);
     setViewport({
       longitude: restaurant.lng,
@@ -225,6 +270,14 @@ function App() {
       transitionDuration: 'auto'
     });
   };
+
+  // when popup arrow is clicked
+  const onPopupClick = restaurant => {
+    setClickedPopup(restaurant);
+    if (mobile) {
+      toggleMobileView();
+    }
+  }
 
   // compare function used for sorting
   const compareValues = (key, order='desc') => {
@@ -264,33 +317,21 @@ function App() {
 
   if (pageLoading) {
     return (
-      <ThemeProvider theme={theme}>
-      <div className="App">
-        <div className="InfoContainer">
-          <Nav />
-          <Controls 
-            articlesData={articlesData}
-            articles={articles}
-            onSelectChange={onSelectChange}
-            selectValue={articles}
-            inputValue={inputValue}
-            handleInputChange={handleInputChange}
-          />
-          <FoodList 
-          />
-        </div>
-        <div className="MapContainer">
-        </div>
-      </div>
-      </ThemeProvider>
+      <LoadingSkeleton />
     )
   }
 
   return (
     <ThemeProvider theme={theme}>
-    <div className="App">
+    <div className="App" style={appStyle}>
+      <div className="NavContainer" style={navContainerStyle}>
+        <Nav 
+          mobile={mobile}
+          mobileView={mobileView}
+          toggleMobileView={toggleMobileView}
+        />
+      </div>
       <div className="InfoContainer">
-        <Nav />
         <Controls 
           articlesData={articlesData}
           articles={articles}
@@ -313,7 +354,7 @@ function App() {
           clickedRestaurant={clickedRestaurant}
         />
       </div>
-      <div className="MapContainer">
+      <div className="MapContainer" style={mapContainerStyle}>
         <Map 
           viewport={viewport}
           setViewport={setViewport}
@@ -321,8 +362,7 @@ function App() {
           restaurantsGeojson={restaurantsGeojson}
           onMapClick={onMapClick}
           clickedRestaurant={clickedRestaurant}
-          setClickedRestaurant={setClickedRestaurant}
-          setClickedPopup={setClickedPopup}
+          onPopupClick={onPopupClick}
         />
       </div>
     </div>

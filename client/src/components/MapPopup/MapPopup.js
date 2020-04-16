@@ -1,15 +1,13 @@
-// class-based component to use PureComponent
 import React from 'react';
 import {Popup} from 'react-map-gl';
 import './MapPopup.css'
 
 import Typography from '@material-ui/core/Typography';
-import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 function MapPopup(props) {
-    const {restaurant, setClickedPopup} = props;
+    const {restaurant, onPopupClick} = props;
     console.log('rendering popup');
 
     return (
@@ -30,7 +28,7 @@ function MapPopup(props) {
                 </Typography>
                 </div>
                 <div className="Popup-text-icon">
-                <IconButton size="small" edge="end" style={{border: '1px solid', borderColor: '#DCDCDC'}} onClick={()=> setClickedPopup(restaurant)}>
+                <IconButton size="small" edge="end" style={{border: '1px solid', borderColor: '#DCDCDC'}} onClick={()=> onPopupClick(restaurant)}>
                     <ChevronRightIcon />
                 </IconButton>
                 </div>

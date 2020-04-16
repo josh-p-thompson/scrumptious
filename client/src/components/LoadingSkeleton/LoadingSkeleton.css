@@ -1,27 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Muli:400,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans:500&display=swap');
 
-.App{
+.LoadingSkeleton{
   display: grid;
   grid-template-columns: 20rem auto;
-  grid-template-rows: 4rem auto;
   width: 100vw;
   height: 100vh;
   font-family: 'Muli', sans-serif; 
 }
 
-.NavContainer {
+.InfoSkeleton{
   grid-column: 1;
-  grid-row: 1;
-  background-color: #f0f2f4;
-  box-shadow: 0px 2px 4px 2px rgba(21,34,53,0.2);
-  z-index: 2;
-  display: flex;
-}
-
-.InfoContainer{
-  grid-column: 1;
-  grid-row: 2;
   background-color: #f0f2f4;
   box-shadow: 0px 2px 4px 2px rgba(21,34,53,0.2);
   height: 100%;
@@ -29,8 +18,7 @@
   z-index: 1;
 }
 
-.MapContainer {
+.MapSkeleton {
   grid-column: 2;
-  grid-row: 1 / span 2; 
   overflow: hidden;
 }
