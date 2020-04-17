@@ -1,5 +1,7 @@
+const path = require('path');
 const express = require('express');
-const router = express.Router();
+const app = express();
+app.use(express.json());
 const { pool } = require('./db.js')
 
 /*
@@ -50,7 +52,7 @@ ROUTES
 */
 
 
-router.get('/api/restaurants', (request, response) => {
+app.get('/api/restaurants', (request, response) => {
 	let userLat = request.query.lat;
 	let userLng = request.query.lng;
 
@@ -85,32 +87,40 @@ router.get('/api/restaurants', (request, response) => {
 				restaurants.map(rest =>
 					rest['distance'] = parseFloat(calculateDistance(rest.lat, rest.lng, userLat, userLng))
 				);
-				response.status(200).json(restaurants);
+				response.json(restaurants);
 			}
 		}); 
 	});
 });
 
-router.get('/api/articles', (request, response) => {
+app.get('/api/articles', (request, response) => {
 	pool.query(queryArticles, (error, results) => {
 		if (error) {
 		  throw error
 		}
-		response.status(200).json(results.rows)
+		response.json(results.rows)
 	})
 })
 
-
-
-if (process.env.NODE_ENV === 'production') {
-	// Exprees will serve up production assets
-	router.use(express.static('client/build'));
+// Logger & configuration
+function logger(req, res, next) {
+	console.log(req.method, req.url);
+	next();
+  }
+  app.use(logger);
+  /////////////////////////////////////////////
   
-	// Express serve up index.html file if it doesn't recognize route
-	const path = require('path');
-	router.get('*', (req, res) => {
-	  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-	});
-}
-
-module.exports = router
+  
+  // For production, handle any requests that don't match the ones above
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  
+  // Wild-card, so handle everything else
+  app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, '/client/build/index.html'));
+  });
+  
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+	console.log('server listening');
+})
