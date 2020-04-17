@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {FlyToInterpolator} from 'react-map-gl';
 import './App.css';
@@ -341,7 +341,6 @@ function App() {
           sortBy={sortBy}
           clickedPopup={clickedPopup}
           setClickedPopup={setClickedPopup}
-          clickedRestaurant={clickedRestaurant}
         />
       </div>
       <div className="MapContainer" style={mapContainerStyle}>

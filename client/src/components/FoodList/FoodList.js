@@ -4,10 +4,9 @@ import ListCard from "../ListCard/ListCard.js"
 import memoUtil from '../../utils/memoUtil.js'
 
 import Button from '@material-ui/core/Button';
-import Skeleton from '@material-ui/lab/Skeleton';
 
 function FoodList(props) {
-  const {cardsShown, setCardsShown, restaurants, onCardMapClick, clickedPopup, setClickedPopup, clickedRestaurant} = props;
+  const {cardsShown, setCardsShown, restaurants, onCardMapClick, clickedPopup, setClickedPopup} = props;
   console.log('rendering foodlist');
 
   if (restaurants.length === 0) {

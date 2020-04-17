@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www"
   },
+  "cacheDirectories": ["client/node_modules", "node_modules"],
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

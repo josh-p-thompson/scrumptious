@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Controls.css';
 import SelectLists from '../SelectLists/SelectLists.js'
 

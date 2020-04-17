@@ -35,7 +35,6 @@ const unclusteredPointLayer = {
       'icon-anchor': 'bottom',
       'icon-size': 1.5,
       'icon-padding': 0,
-      'icon-allow-overlap': true, 
     }
 }
 
