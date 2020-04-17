@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www", 
+    "start": "node ./bin/www", 
     "postinstall": "bash ./client/build.sh"
   },
   "cacheDirectories": ["client/node_modules", "node_modules"],
