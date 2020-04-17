@@ -114,4 +114,16 @@ router.get('/api/articles', (request, response) => {
 })
 
 
+
+if (process.env.NODE_ENV === 'production') {
+	// Exprees will serve up production assets
+	router.use(express.static('client/build'));
+  
+	// Express serve up index.html file if it doesn't recognize route
+	const path = require('path');
+	router.get('*', (req, res) => {
+	  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	});
+}
+
 module.exports = router
