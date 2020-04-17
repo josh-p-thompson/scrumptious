@@ -1,7 +1,5 @@
-const path = require('path');
 const express = require('express');
-// const router = express.Router();
-const app = express();
+const router = express.Router();
 const { pool } = require('./db.js')
 
 /*
@@ -52,20 +50,20 @@ ROUTES
 */
 
 
-// if (process.env.NODE_ENV === 'production') {
-// 	// Exprees will serve up production assets
-// 	router.use(express.static('client/build'));
+if (process.env.NODE_ENV === 'production') {
+	// Exprees will serve up production assets
+	// router.use(express.static('client/build'));
   
-// 	// Express serve up index.html file if it doesn't recognize route
-// 	const path = require('path');
-// 	router.get('*', (req, res) => {
-// 	  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-// 	});
-// }
+	// Express serve up index.html file if it doesn't recognize route
+	const path = require('path');
+	router.get('*', (req, res) => {
+	  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	});
+}
 
 
 
-app.get('/api/restaurants', (request, response) => {
+router.get('/api/restaurants', (request, response) => {
 	let userLat = request.query.lat;
 	let userLng = request.query.lng;
 
@@ -106,7 +104,7 @@ app.get('/api/restaurants', (request, response) => {
 	});
 });
 
-app.get('/api/articles', (request, response) => {
+router.get('/api/articles', (request, response) => {
 	pool.query(queryArticles, (error, results) => {
 		if (error) {
 		  throw error
@@ -116,12 +114,4 @@ app.get('/api/articles', (request, response) => {
 })
 
 
-// For production, handle any requests that don't match the ones above
-app.use(express.static(path.join(__dirname, 'client/build')));
-
-// Wild-card, so handle everything else
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '/client/build/index.html'));
-  });
-  
-module.exports = app
+module.exports = router
