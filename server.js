@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 app.use(express.json());
-const { pool } = require('./db.js')
+const { pool } = require('./config.js')
 
 /*
 
@@ -107,18 +107,18 @@ function logger(req, res, next) {
 	console.log(req.method, req.url);
 	next();
   }
-  app.use(logger);
-  /////////////////////////////////////////////
-  
-  
-  // For production, handle any requests that don't match the ones above
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  
-  // Wild-card, so handle everything else
-  app.get('*', (req, res) => {
+app.use(logger);
+/////////////////////////////////////////////
+
+
+// For production, handle any requests that don't match the ones above
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Wild-card, so handle everything else
+app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/client/build/index.html'));
-  });
-  
+});
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

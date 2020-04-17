@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./main/server.js", 
+    "start": "node server.js", 
     "postinstall": "bash ./client/build.sh"
   },
   "cacheDirectories": ["client/node_modules", "node_modules"],
