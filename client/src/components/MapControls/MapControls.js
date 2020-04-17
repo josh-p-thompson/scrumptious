@@ -3,14 +3,14 @@ import {GeolocateControl, NavigationControl} from 'react-map-gl';
 
 const geolocateStyle = {
     position: 'absolute',
-    bottom: 20,
+    bottom: 40,
     right: 50,
     margin: 10,
 };
   
 const navStyle = {
     position: 'absolute',
-    bottom: 60,
+    bottom: 80,
     right: 50,
     padding: 10,
 };

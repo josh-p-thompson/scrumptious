@@ -181,15 +181,14 @@ function App() {
   }
 
   // change styles for mobile map view
-  const styleMobileMap = () => {
-    setAppStyle({gridTemplateColumns: "0 auto"});
+  const styleMobileMap = () => {    
+    setAppStyle({gridTemplateColumns: "0 auto", gridTemplateRows: "5rem auto"});
     setNavContainerStyle({gridColumn: "2"}); 
-    setMapContainerStyle({gridRow: "2"}); 
   }
 
   // change styles for mobile list view
   const styleMobileList = () => {
-    setAppStyle({gridTemplateColumns: "auto 0"})
+    setAppStyle({gridTemplateColumns: "auto 0", gridTemplateRows: "5rem auto"})
     setNavContainerStyle({}); 
     setMapContainerStyle({}); 
   }

@@ -32,5 +32,6 @@
 .MapContainer {
   grid-column: 2;
   grid-row: 1 / span 2; 
-  overflow: hidden;
+  height: 100%;
+  /* overflow: hidden; */
 }
