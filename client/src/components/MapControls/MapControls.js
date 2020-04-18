@@ -3,20 +3,21 @@ import {GeolocateControl, NavigationControl} from 'react-map-gl';
 
 const geolocateStyle = {
     position: 'absolute',
-    bottom: 40,
+    bottom: 60,
     right: 50,
     margin: 10,
 };
   
 const navStyle = {
     position: 'absolute',
-    bottom: 80,
+    bottom: 100,
     right: 50,
     padding: 10,
 };
 
 function MapControls(props) {
     const {onGeolocate} = props;
+    console.log('rendering mapcontrols');
     return (
         <div className="MapControls">
             <GeolocateControl

@@ -47,7 +47,7 @@ function App() {
   });
   const [width, setWidth] = useState(window.innerWidth);
   const [mobile, setMobile] = useState(false);
-  const [mobileView, setMobileView] = useState('list');
+  const [mobileView, setMobileView] = useState('');
 
   const [appStyle, setAppStyle] = useState({})
   const [navContainerStyle, setNavContainerStyle] = useState({})
@@ -74,15 +74,49 @@ function App() {
   }, [width]
   )
 
-  // modify styles if mobile changes
+  // setting MobileView when mobile changes
   useEffect(() => {
+    console.log('USE EFECT: setting mobileView');
     if (mobile) {
-      styleMobileMap();
       setMobileView('list');
+    } else {
+      setMobileView('');
+    }
+  }, [mobile]
+  )
+
+  // set styles if mobileView changes
+  useEffect(() => {
+    console.log('USE EFFECT: setting styles from mobileView');
+
+    // change styles for mobile map view
+    const styleMobileMap = () => {    
+      setAppStyle({gridTemplateColumns: "0 auto", gridTemplateRows: "5rem auto"});
+      setNavContainerStyle({gridColumn: "2"}); 
+    }
+
+    // change styles for mobile list view
+    const styleMobileList = () => {
+      setAppStyle({gridTemplateColumns: "auto 0", gridTemplateRows: "5rem auto"})
+      setNavContainerStyle({}); 
+      setMapContainerStyle({}); 
+    }
+
+    // clear styles for non-mobile
+    const clearStyles = () => {
+      setAppStyle({}); 
+      setNavContainerStyle({}); 
+      setMapContainerStyle({}); 
+    }
+
+    if (mobileView === 'list') {
+      styleMobileMap();
+    } else if (mobileView === 'map') {
+      styleMobileList();
     } else {
       clearStyles();
     }
-  }, [mobile]
+  }, [mobileView]
   )
 
   // fetch articlesData
@@ -171,33 +205,12 @@ function App() {
 
   // toggles mobileView
   const toggleMobileView = () => {
+    console.log('togggleMobileView: toggling view between map and list; mobileView is ', mobileView);
     if (mobileView === 'map') {
       setMobileView('list'); 
-      styleMobileMap();
-    } else {
+    } else if (mobileView === 'list') {
       setMobileView('map')
-      styleMobileList();
     }
-  }
-
-  // change styles for mobile map view
-  const styleMobileMap = () => {    
-    setAppStyle({gridTemplateColumns: "0 auto", gridTemplateRows: "5rem auto"});
-    setNavContainerStyle({gridColumn: "2"}); 
-  }
-
-  // change styles for mobile list view
-  const styleMobileList = () => {
-    setAppStyle({gridTemplateColumns: "auto 0", gridTemplateRows: "5rem auto"})
-    setNavContainerStyle({}); 
-    setMapContainerStyle({}); 
-  }
-
-  // clear styles for non-mobile
-  const clearStyles = () => {
-    setAppStyle({}); 
-    setNavContainerStyle({}); 
-    setMapContainerStyle({}); 
   }
 
   // set articles selected from filter
@@ -340,6 +353,7 @@ function App() {
           sortBy={sortBy}
           clickedPopup={clickedPopup}
           setClickedPopup={setClickedPopup}
+          mobileView={mobileView}
         />
       </div>
       <div className="MapContainer" style={mapContainerStyle}>

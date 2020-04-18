@@ -6,7 +6,7 @@ import memoUtil from '../../utils/memoUtil.js'
 import Button from '@material-ui/core/Button';
 
 function FoodList(props) {
-  const {cardsShown, setCardsShown, restaurants, onCardMapClick, clickedPopup, setClickedPopup} = props;
+  const {cardsShown, setCardsShown, restaurants, onCardMapClick, clickedPopup, setClickedPopup, mobileView} = props;
   console.log('rendering foodlist');
 
   if (restaurants.length === 0) {
@@ -70,4 +70,4 @@ function FoodList(props) {
   }
 }
 
-export default memoUtil(FoodList, ['cardsShown', 'restaurants', 'clickedPopup']);
+export default memoUtil(FoodList, ['cardsShown', 'restaurants', 'clickedPopup', 'mobileView']);
