@@ -1,0 +1,17 @@
+.Controls {
+    padding-right: .5rem;
+    padding-left: .5rem;
+    padding-top: 1rem; 
+    padding-bottom: 1rem; 
+}
+
+.Controls-buttons {
+    display: flex;
+    justify-content: space-between;
+    /* margin-bottom: 1rem; */
+}
+
+.Controls-list {
+    padding-left: .5rem; 
+    padding-right: .5rem;
+}

@@ -6,6 +6,7 @@ import './App.css';
 import Nav from './components/Nav/Nav.js'
 import FoodList from './components/FoodList/FoodList.js'
 import Controls from './components/Controls/Controls.js'
+import MobileControls from './components/MobileControls/MobileControls.js'
 import Map from './components/Map/Map.js'
 
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -52,6 +53,8 @@ function App() {
   const [appStyle, setAppStyle] = useState({})
   const [navContainerStyle, setNavContainerStyle] = useState({})
   const [mapContainerStyle, setMapContainerStyle] = useState({})
+
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // set window width
   useEffect(() => {
@@ -213,6 +216,11 @@ function App() {
     }
   }
 
+  // toggle dialog opening when in mobile
+  const toggleDialog = () => {
+    setDialogOpen(!dialogOpen);
+};
+
   // set articles selected from filter
   const onSelectChange = (event, value) => { 
     console.log("onSelectChange: setting articles from filter");
@@ -335,7 +343,7 @@ function App() {
         />
       </div>
       <div className="InfoContainer">
-        <Controls 
+        <MobileControls 
           articlesData={articlesData}
           onSelectChange={onSelectChange}
           selectValue={articles}
@@ -345,6 +353,8 @@ function App() {
           inputValue={inputValue}
           handleInputChange={handleInputChange}
           userLocation={userLocation}
+          dialogOpen={dialogOpen}
+          toggleDialog={toggleDialog}
         />
         <FoodList 
           cardsShown={cardsShown}
