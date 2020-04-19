@@ -14,6 +14,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MapTwoToneIcon from '@material-ui/icons/MapTwoTone';
 import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
 
 const useStyles = makeStyles({
   cardContent: {
@@ -26,6 +28,11 @@ const useStyles = makeStyles({
       paddingLeft: 4, 
       paddingRight: 4,
   }, 
+  cardActions: {
+    justifyContent: 'flex-start', 
+    paddingLeft: 15, 
+    paddingTop: 10
+  }
 });
 
 function ListItemLink(props) {
@@ -67,16 +74,15 @@ function ListCard(props) {
             }
         </List>
       </CardContent>
-      <CardActions style={{justifyContent: 'space-between'}}>
-        <Eater className="ListCard-eater" />
-        <div>
-          <IconButton onClick={() => onCardMapClick(restaurant)} >
+      <CardActions className={classes.cardActions}>
+        {/* <div> */}
+          <IconButton size={"medium"} onClick={() => onCardMapClick(restaurant)} style={{border: '1px solid', borderColor: '#DCDCDC'}} >
               <MapTwoToneIcon color="primary"/>
           </IconButton>
-          <IconButton href={restaurant.googlemaps_url} target="_blank" >
+          <IconButton size={"medium"} href={restaurant.googlemaps_url} target="_blank" style={{border: '1px solid', borderColor: '#DCDCDC'}} >
               <RoomTwoToneIcon color="primary"/>
           </IconButton>
-        </div>
+        {/* </div> */}
       </CardActions>
     </Card>
   );
