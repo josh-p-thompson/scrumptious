@@ -119,6 +119,17 @@ app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/client/build/index.html'));
 });
 
+// if production, redirect to https
+if(process.env.NODE_ENV === 'production') {
+	app.use((req, res, next) => {
+	  if (req.header('x-forwarded-proto') !== 'https')
+		res.redirect(`https://${req.header('host')}${req.url}`)
+	  else
+		next()
+	})
+  }
+
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
