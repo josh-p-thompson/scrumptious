@@ -8,9 +8,18 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 function Controls(props) {
-    const {articlesData, onSelectChange, selectValue, sortBy, onSortChange, onApplyFilter, inputValue, handleInputChange} = props;
+    const {articlesData, onSelectChange, selectValue, sortBy, onSortChange, onApplyFilter, inputValue, handleInputChange, userLocation} = props;
 
     console.log('rendering Controls');
+    
+    const childrenDisabled = [
+        <ToggleButton key={1} value="mentions" style={{fontSize: ".8rem", fontWeight: 700}} disableRipple={true}>
+            Mentions
+        </ToggleButton>,
+        <ToggleButton key={2} value="distance" style={{fontSize: ".8rem", fontWeight: 700}} disableRipple={true} disabled>
+            Distance
+        </ToggleButton>,
+    ];
     
     const children = [
         <ToggleButton key={1} value="mentions" style={{fontSize: ".8rem", fontWeight: 700}} disableRipple={true}>
@@ -43,13 +52,25 @@ function Controls(props) {
             >
                 Filter
             </Button>
-            <ToggleButtonGroup 
-                size="small" 
-                value={sortBy} 
-                exclusive 
-                onChange={onSortChange}>
-                {children}
-            </ToggleButtonGroup>
+            {
+            userLocation.lat === null ? (
+                <ToggleButtonGroup 
+                    size="small" 
+                    value={sortBy} 
+                    exclusive 
+                    onChange={onSortChange}>
+                    {childrenDisabled}
+                </ToggleButtonGroup>
+            ) : (
+                <ToggleButtonGroup 
+                    size="small" 
+                    value={sortBy} 
+                    exclusive 
+                    onChange={onSortChange}>
+                    {children}
+                </ToggleButtonGroup>
+            )
+            }
         </div>
         <SelectLists
             options={articlesData}

@@ -344,6 +344,7 @@ function App() {
           onApplyFilter = {onApplyFilter}
           inputValue={inputValue}
           handleInputChange={handleInputChange}
+          userLocation={userLocation}
         />
         <FoodList 
           cardsShown={cardsShown}
