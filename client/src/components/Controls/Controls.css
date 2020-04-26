@@ -10,3 +10,8 @@
     justify-content: space-between;
     /* margin-bottom: 1rem; */
 }
+
+.Controls-list {
+    padding-left: .5rem; 
+    padding-right: .5rem;
+}

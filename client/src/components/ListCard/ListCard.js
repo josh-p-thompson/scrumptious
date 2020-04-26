@@ -1,6 +1,5 @@
 import React from 'react';
 import './ListCard.css';
-import { ReactComponent as Eater } from './eater.svg';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -14,7 +13,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MapTwoToneIcon from '@material-ui/icons/MapTwoTone';
 import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 
 
 const useStyles = makeStyles({

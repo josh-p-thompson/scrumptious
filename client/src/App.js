@@ -6,7 +6,6 @@ import './App.css';
 import Nav from './components/Nav/Nav.js'
 import FoodList from './components/FoodList/FoodList.js'
 import Controls from './components/Controls/Controls.js'
-import MobileControls from './components/MobileControls/MobileControls.js'
 import Map from './components/Map/Map.js'
 
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -260,6 +259,7 @@ function App() {
     })    
   }
 
+  // determines the clicked restaurant when map is clicked
   const onMapClick = event => {
     console.log('onMapClick: setting clicked restaurant');
     if (event.features.length !== 0){
@@ -343,7 +343,7 @@ function App() {
         />
       </div>
       <div className="InfoContainer">
-        <MobileControls 
+        <Controls 
           articlesData={articlesData}
           onSelectChange={onSelectChange}
           selectValue={articles}
