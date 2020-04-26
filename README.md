@@ -8,7 +8,7 @@ A live version of the app can be viewed [here](https://findscrumptious.herokuapp
 
 ### Interactive Map
 
-Visualizes all of Eater's recommendations on one map with a detailed sidebar that provides each restaurant as a card with additional information (e.g., referenced articles, location, google maps link) and functionality (filtering and sorting cards).  
+Visualizes all of Eater's recommendations on one map. The sidebar provides additional information for each restaurant and the option for filtering and sorting.  
 
 ![](static/demo_overview.png)
 
@@ -20,7 +20,7 @@ The user can visualize himself on the map by enabling geolocation and then easil
 
 ### Filter
 
-Filter functionality allows the user limit results by selecting specific Eater lists (e.g., Pizza, Michelin).  
+Filter functionality allows the user to limit results by selecting specific Eater lists (e.g., Pizza, Michelin).  
 
 ![](static/demo_filter.png)
 
@@ -29,8 +29,8 @@ Filter functionality allows the user limit results by selecting specific Eater l
 In mobile view the map and cards are rendered independently.
 
 <p float="left">
-  <img src="static/demo_mobile_map.png" width="100" />
-  <img src="static/demo_mobile_list.png" width="100" /> 
+  <img src="static/demo_mobile_map.png" width="300" />
+  <img src="static/demo_mobile_list.png" width="300" /> 
 </p>
 
 ## Database
