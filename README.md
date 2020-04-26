@@ -26,11 +26,12 @@ Filter functionality allows the user to limit results by selecting specific Eate
 
 ### Responsive Design
 
-In mobile view the map and cards are rendered independently.
+In mobile view the map and cards are rendered independently and can be toggled back and forth.
 
 <p float="left">
-  <img src="static/demo_mobile_map.png" width="300" />
-  <img src="static/demo_mobile_list.png" width="300" /> 
+  <img src="static/demo_mobile_map.png" width="400" />
+  <div width="50">
+  <img src="static/demo_mobile_list.png" width="400" /> 
 </p>
 
 ## Database
@@ -39,7 +40,7 @@ The Postgres database is populated by the Scrapy crawler in ```/database```.
 
 ### ```eater-spider.py```
 
-```/database/eater/spiders/eater-spider.py``` is what actually scrapes articles and restaurants from Eater.com. Each item collected by the crawler is passed through a pipeline to be stored in the database.
+```/database/eater/spiders/eater-spider.py``` is what actually scrapes articles and restaurants from Eater. Each item collected by the crawler is passed through a pipeline to be stored in the database.
 
 ### ```pipelines.py```
 
@@ -47,11 +48,11 @@ The Postgres database is populated by the Scrapy crawler in ```/database```.
 
 First, each item is passed through the ```DuplicatesPipeline```, which queries the database to determine if the item already exists.   
 
-If new, the item is then passed to the ```RestaurantsPipeline```. Each restaurant's coordinates are parsed from the link to google maps provided by Eater. Some google maps URLs include only a ```place_id```. In these cases, I call the Google Maps API to access the latitude and longitude. Finally, the item is stored in the database.  
+If new, the item is then passed to the ```RestaurantsPipeline```. Each restaurant's coordinates are parsed from a google maps URL provided by Eater. Some of these URLs include only a ```place_id```. In these cases, I call the Google Maps API to access the latitude and longitude.
 
 ### ```models.py```
 
-```/database/eater/models.py``` creates the database connection and defines tables and associated schemata. The ```article``` and ```restaurant``` tables share a many-to-many relationship via ```restaurant_article```, since restaurants can appear on multiple articles.
+```/database/eater/models.py``` creates the database connection and defines tables and associated schemata. The ```article``` and ```restaurant``` tables share a many-to-many relationship via ```restaurant_article```.
 
 ## Server
 
@@ -67,7 +68,7 @@ This endpoint queries postgres for all restaurants stored in the database. Addit
 
 ## Client
 
-The React.js client is housed in ```/client```. Implemented entirely with React Hooks, the front-end relies heavily upon the Material-UI and react-map-gl component libraries. I will provide a short summary of each component:  
+The React.js client is housed in ```/client```. Implemented entirely with React Hooks, the front-end relies heavily upon the Material-UI and react-map-gl component libraries. 
 
 ### ```<Nav />```
 
