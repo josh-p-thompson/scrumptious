@@ -28,9 +28,8 @@ Filter functionality allows the user to limit results by selecting specific Eate
 
 In mobile view the map and cards are rendered independently and can be toggled back and forth.
 
-<p float="left">
+<p display="grid" grid-row-gap="50px">
   <img src="static/demo_mobile_map.png" width="350" />
-  <div width="50" />
   <img src="static/demo_mobile_list.png" width="350" /> 
 </p>
 
