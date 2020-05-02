@@ -30,7 +30,7 @@ In mobile view the map and cards are rendered independently and can be toggled b
 
 <p float="left">
   <img src="static/demo_mobile_map.png" width="350" />
-  <img src="static/demo_mobile_list.png" width="350" margin-left="50" /> 
+  <img src="static/demo_mobile_list.png" width="350"/> 
 </p>
 
 ## Database
